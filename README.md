@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Healthcare Voice Translator
 
-## Getting Started
+A voice-based translation web app built with **Next.js**, allowing users to speak, translate, and listen to translations in multiple languages. Designed for healthcare and general users who need quick, accurate translations in real time.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Real-time Voice Recognition:**  
+  Captures speech using the browser’s `SpeechRecognition` API and converts it into text dynamically. Supports continuous listening and updates the transcript live without delays.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Multiple Language Translation:**  
+  Translate speech or typed text into **Spanish, Hindi, French, and Russian**. Users can easily switch the target language using a simple dropdown menu.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Text-to-Speech:**  
+  Translated text can be spoken aloud using the browser’s `SpeechSynthesis` API. Ensures proper pronunciation for each language.
 
-## Learn More
+- **Manual Text Input:**  
+  Users can type text directly into an input field, providing flexibility when voice input is inconvenient or inaccurate.
 
-To learn more about Next.js, take a look at the following resources:
+- **Clear Button:**  
+  Quickly clears the transcript, typed input, and translated text in a single click.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Responsive Design:**  
+  Optimized for **desktop and mobile devices**. Layout automatically adjusts to smaller screens to maintain usability and readability.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **User-Friendly UI:**  
+  Clean, intuitive interface built with **Tailwind CSS**, featuring full-width buttons, readable fonts, and accessible color schemes.
 
-## Deploy on Vercel
+- **Lightweight and Fast:**  
+  Minimalistic design ensures fast loading times and smooth performance on all modern browsers.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tech Stack
+
+### Frontend
+
+- **Next.js 13:** Server-rendered React framework with routing, API support, and optimized performance.  
+- **React:** Manages dynamic state for transcript, input, and translation components.  
+- **Tailwind CSS:** Utility-first CSS framework for responsive, modern design without heavy custom styling.  
+
+### Backend/API
+
+- **Custom Translation API (`/api/translate`):** Sends text to a translation service or model and returns translated results. Handles POST requests with JSON input/output.
+
+### Browser APIs
+
+- **SpeechRecognition API:** Captures live voice input and converts it into text in real time.  
+- **SpeechSynthesis API:** Converts translated text into spoken audio, supporting multiple languages and locales.
+
+### Deployment
+
+- **Vercel:** Optimized platform for Next.js apps with automatic builds, global CDN, and easy deployment.
+
+
