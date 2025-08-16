@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 
 export default function VoiceTranslator() {
+  const [mounted, setMounted] = useState(false);
   const [listening, setListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [translatedText, setTranslatedText] = useState("");
@@ -12,8 +13,11 @@ export default function VoiceTranslator() {
   const recognitionRef = useRef<any>(null);
   const finalTranscriptRef = useRef("");
 
+  // Ensure this only runs on client
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (!mounted) return;
 
     const SpeechRecognition =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -28,10 +32,10 @@ export default function VoiceTranslator() {
       let interim = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const result = event.results[i];
-        if (result.isFinal) finalTranscriptRef.current += result[0].transcript + " ";
-        else interim += result[0].transcript;
+        if (result.isFinal) finalTranscriptRef.current = result[0].transcript; // overwrite previous final transcript to prevent repeats
+        else interim = result[0].transcript;
       }
-      setTranscript(finalTranscriptRef.current + interim);
+      setTranscript(finalTranscriptRef.current + (interim ? " " + interim : ""));
     };
 
     recognitionRef.current = recognition;
@@ -40,20 +44,20 @@ export default function VoiceTranslator() {
       recognition.stop();
       recognitionRef.current = null;
     };
-  }, []);
+  }, [mounted]);
+
+  if (!mounted) return null;
 
   const startListening = () => {
     if (recognitionRef.current && !listening) {
-      recognitionRef.current.onend = () => {};
-      finalTranscriptRef.current = transcript;
+      finalTranscriptRef.current = ""; // reset to avoid repeats
       recognitionRef.current.start();
       setListening(true);
     }
   };
 
   const stopListening = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.onend = null;
+    if (recognitionRef.current && listening) {
       recognitionRef.current.stop();
       setListening(false);
     }
