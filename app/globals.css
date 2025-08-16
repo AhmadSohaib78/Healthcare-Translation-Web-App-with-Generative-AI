@@ -1,0 +1,8 @@
+
+@import "tailwindcss";
+
+body {
+  font-family: theme('fontFamily.sans');
+  color: #1A1A1A;
+  background-color: #F5F9FC;
+}
