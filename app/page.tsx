@@ -8,9 +8,11 @@ export default function VoiceTranslator() {
   const [transcript, setTranscript] = useState("");
   const [translatedText, setTranslatedText] = useState("");
   const [targetLang, setTargetLang] = useState("es");
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<any>(null); // Use any to avoid TS error
 
   useEffect(() => {
+    if (typeof window === "undefined") return; // only run in browser
+
     const SpeechRecognition =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) return;
@@ -20,9 +22,9 @@ export default function VoiceTranslator() {
     recognition.interimResults = true;
     recognition.continuous = true;
 
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
+    recognition.onresult = (event: any) => {
       const text = Array.from(event.results)
-        .map((result) => result[0].transcript)
+        .map((result: any) => result[0].transcript)
         .join("");
       setTranscript(text);
     };
@@ -53,7 +55,6 @@ export default function VoiceTranslator() {
 
   const translateText = async () => {
     if (!transcript) return;
-
     try {
       const res = await fetch("/api/translate", {
         method: "POST",
@@ -81,14 +82,14 @@ export default function VoiceTranslator() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E0F7FF] to-[#F5FAFF] flex flex-col items-center px-4 py-6">
-      {/* Top-left logo with gradient background */}
+      {/* Top-left logo */}
       <div className="absolute top-0 left-0 p-2 rounded-lg bg-gradient-to-r from-[#A0D6FF] to-[#2E6DDE]">
         <div className="bg-gradient-to-br from-[#A0D6FF] to-[#2E6DDE] rounded-lg overflow-hidden flex items-center justify-center w-[140px] h-[60px]">
           <Image
             src="/logo.jpg"
             alt="Logo"
-            width={140} // smaller width
-            height={60} // smaller height
+            width={140}
+            height={60}
             className="object-contain"
           />
         </div>
@@ -176,7 +177,7 @@ export default function VoiceTranslator() {
             <a href="#" className="hover:underline">Instagram</a>
           </div>
           <p className="text-sm mt-4">
-            If you are vision-impaired or have some other impairment covered by the Americans with Disabilities Act or a similar law, and you wish to discuss potential accommodations related to using this website, please contact Sharad Suri at service@naomedical.com or by phone at (917) 633-1548 Extension 288. In our goal to answer your questions as quick as possible, we use the assistance of a large language model wherever applicable. If there are any errors or concerns, please bring it to our attention by emailing us.
+            If you are vision-impaired or have some other impairment, please contact us. We use AI assistance; if any errors occur, report via email.
           </p>
         </div>
       </footer>
